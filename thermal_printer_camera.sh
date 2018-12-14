@@ -18,7 +18,7 @@ do
 		#lp -d zj-58 filename.png 
 		#The Raspberry Pi displays a preview picture and after 2 seconds, sends it to the printer.
 		#Change the timeout value in milliseconds to change the preview time. 2000 = 2 seconds, 3000 = 3 seconds, etc.
-		raspistill -br 50 --fullscreen --timeout 5000 -o - | lp
+		raspistill -ex auto -p 0,0,800,600 --timeout 4000 -o - | lp
 		sleep 1
 		# Wait for user to release button before resuming
 		while [ $(gpio -g read $SHUTTER) -eq 0 ]; do continue; done
