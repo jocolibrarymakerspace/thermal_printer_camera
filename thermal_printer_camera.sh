@@ -1,14 +1,18 @@
+#Welcome to the Black & Veatch MakerSpace's Thermal Printer Camera project!
+
 #This project is based on Phillip Burgess' "Instant Camera using Raspberry Pi and Thermal Printer".
 #You can find his complete tutorial on Adafruit at https://learn.adafruit.com/instant-camera-using-raspberry-pi-and-thermal-printer?view=all
-#You can find our tutorial for this project, including a laser-cut frame, at [insert URL].
+#You can find our tutorial for this project, including a laser-cut frame, at https://www.instructables.com/Pi-Powered-Thermal-Printer-Camera-1/
 
 #!/bin/bash
 
-#We tell the Raspberry Pi on which pin the shutter button is connected
+#We tell the Raspberry Pi on which pins the shutter and off buttons will be
 SHUTTER=16
+OFFPIN=26
 
-# We get the GPIO pin states ready
+# We get the GPIO pins states ready
 gpio -g mode  $SHUTTER up
+gpio -g mode  $OFFPIN up
 
 while :
 do
@@ -23,5 +27,13 @@ do
 		# Wait for user to release button before resuming
 		while [ $(gpio -g read $SHUTTER) -eq 0 ]; do continue; done
 	fi
-
+	
+	#The Raspberry Pi checks if the shutdown pins are connected
+	if [ $(gpio -g read $OFFPIN) -eq 0 ]; then
+		#Waiting for the user to unground pins before continuing
+		while [ $(gpio -g read $OFFPIN) -eq 0 ]; do continue; done
+		echo "Alright, we are shutting down! See you next time!"
+		sleep 5
+		sudo shutdown now
+	fi
 done
