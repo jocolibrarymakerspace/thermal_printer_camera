@@ -14,6 +14,13 @@ OFFPIN=26
 gpio -g mode  $SHUTTER up
 gpio -g mode  $OFFPIN up
 
+clear
+echo "Welcome to JCL's thermal printer camera!"
+echo "Push the Big Button to take a picture! If there is a screen, you will see a preview so you can strike a pose!"
+echo "Press CTRL+C on a keyboard to stop the picture-taking script"
+echo "Connect PIN 26 to Ground to shut down the Raspberry Pi safely"
+echo "Have fun!"
+
 while :
 do
 	# The Raspberry Pi checks if the shutter button has been pressed
@@ -26,6 +33,7 @@ do
 		sleep 1
 		# Wait for user to release button before resuming
 		while [ $(gpio -g read $SHUTTER) -eq 0 ]; do continue; done
+		echo "Picture taken!"
 	fi
 	
 	#The Raspberry Pi checks if the shutdown pins are connected
